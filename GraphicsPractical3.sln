@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphicsPractical3", "GraphicsPractical3\GraphicsPractical3\GraphicsPractical3.csproj", "{AA3646EF-4222-437E-91FF-1D419D51BF73}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "GraphicsPractical3Content", "GraphicsPractical3\GraphicsPractical3Content\GraphicsPractical3Content.contentproj", "{E195FF2F-4197-4CCF-BDFE-277B9CDB7D62}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AA3646EF-4222-437E-91FF-1D419D51BF73}.Debug|x86.ActiveCfg = Debug|x86
+		{AA3646EF-4222-437E-91FF-1D419D51BF73}.Debug|x86.Build.0 = Debug|x86
+		{AA3646EF-4222-437E-91FF-1D419D51BF73}.Release|x86.ActiveCfg = Release|x86
+		{AA3646EF-4222-437E-91FF-1D419D51BF73}.Release|x86.Build.0 = Release|x86
+		{E195FF2F-4197-4CCF-BDFE-277B9CDB7D62}.Debug|x86.ActiveCfg = Debug|x86
+		{E195FF2F-4197-4CCF-BDFE-277B9CDB7D62}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
