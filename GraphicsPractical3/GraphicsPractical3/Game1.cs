@@ -35,6 +35,8 @@ namespace GraphicsPractical3
         //Effect on Space
         string sEffect;
         int teller;
+        int iSwitch;
+        bool b;
 
         public Game1()
         {
@@ -91,6 +93,8 @@ namespace GraphicsPractical3
             //Start Effect
             sEffect = "Simple";
             teller = 0;
+            iSwitch = 0;
+            b = true;
             
             // Setup the quad
             this.setupQuad();
@@ -138,11 +142,16 @@ namespace GraphicsPractical3
             float deltaAngleX = 0;
             KeyboardState kbState = Keyboard.GetState();
                         
-            if (kbState.IsKeyUp(Keys.Space))
-            {
-                teller ++;
-                int i = teller % 4;
-                switch(i)
+            if (kbState.IsKeyDown(Keys.Space))
+            {      
+                if(b==true)
+                {
+                    teller++;
+                    b = false;
+                    iSwitch = teller % 4;                    
+                }
+
+                switch(iSwitch)
                 {
                     case 0:
                         sEffect = "Simple";
@@ -165,6 +174,10 @@ namespace GraphicsPractical3
                         break;
                 }
 
+            }
+            if (kbState.IsKeyUp(Keys.Space))
+            {
+                b = true;
             }
 
             //CameraPosition Rotations
