@@ -12,7 +12,7 @@ float4 DiffuseColor, AmbientColor, SpecularColor;
 float AmbientIntensity, SpecularIntensity, SpecularPower;
 float3 CameraPosition, PointLight;
 
-texture Texture;
+/*texture Texture;
 sampler TextureSampler : register(s0)
 {
 	Texture = (Texture);
@@ -21,7 +21,7 @@ sampler TextureSampler : register(s0)
 	MipFilter = Linear;
 	AddressU = Wrap;
 	AddressV = Wrap;
-};
+};*/
 
 //---------------------------------- Input / Output structures ----------------------------------
 
@@ -32,7 +32,7 @@ struct VertexShaderInput
 {
 	float4 Position3D : POSITION0;
 	float4 Normal3D : NORMAL0;
-	float2 TextureCoordinate : TEXCOORD0;
+	//float2 TextureCoordinate : TEXCOORD0;
 
 };
 
@@ -49,16 +49,16 @@ struct VertexShaderOutput
 	float4 Position2D : POSITION0;
 	float4 Normal : TEXCOORD0;
 	float4 Position3D : TEXCOORD1;
-	float2 TextureCoordinate : TEXCOORD3;
+	//float2 TextureCoordinate : TEXCOORD3;
 };
 
 //------------------------------------------ Functions ------------------------------------------
 
 // Implement the Coloring using normals assignment here
-float4 NormalColor(VertexShaderOutput input)
+/*float4 NormalColor(VertexShaderOutput input)
 {
 	return float4(input.Normal.x, input.Normal.y, input.Normal.z, 1);
-}
+}*/
 
 // Implement the Procedural texturing assignment here
 float4 ProceduralColor(VertexShaderOutput input)
@@ -90,7 +90,7 @@ float4 ProceduralColor(VertexShaderOutput input)
 }
 
 // LambertianLighting implementation
-float4 LambertianLighting(VertexShaderOutput input)
+/*float4 LambertianLighting(VertexShaderOutput input)
 {
 	float3x3 rotationAndScale = (float3x3) World;
 		float3 normal = mul(input.Normal, rotationAndScale);
@@ -102,7 +102,7 @@ float4 LambertianLighting(VertexShaderOutput input)
 		float4 ambColor = AmbientColor * AmbientIntensity;
 
 		return diffColor + ambColor;
-}
+}*/
 
 // PhongLighting implementation
 float4 PhongLighting(VertexShaderOutput input)
@@ -163,8 +163,46 @@ technique Simple
 	}
 }
 
+//---------------------------------------- Technique: TestTechnique ----------------------------------------
+VertexShaderOutput TestVertexShader(VertexShaderInput input)
+{
+	// Allocate an empty output struct
+	VertexShaderOutput output = (VertexShaderOutput)0;
+
+	// Do the matrix multiplications for perspective projection and the world transform
+	float4 worldPosition = mul(input.Position3D, World);
+		float4 viewPosition = mul(worldPosition, View);
+		output.Position2D = mul(viewPosition, Projection);
+
+	//1.1 Coloring using normals (add normal values to the output, so it can be used for coloring)
+	output.Normal = input.Normal3D;
+
+	//1.2 Checkerboard pattern (add pixel coordinates)
+	output.Position3D = input.Position3D;
+
+	return output;
+}
+
+float4 TestPixelShader(VertexShaderOutput input) : COLOR0
+{
+	//Uncomment the one you want to see
+	//float4 color = NormalColor(input); //1.1
+	float4 color = ProceduralColor(input); //1.2
+	//float4 color = LambertianLighting(input); //(2.1 + 2.2)
+	//float4 color = PhongLighting(input);	//2.3,2.4
+	return color;
+}
+technique Test
+{
+	pass Pass0
+	{
+		VertexShader = compile vs_2_0 TestVertexShader();
+		PixelShader = compile ps_2_0 TestPixelShader();
+	}
+}
+
 //---------------------------------------- Technique: TextureTechnique ----------------------------------------
-VertexShaderOutput TextureVertexShader(VertexShaderInput input)
+/*VertexShaderOutput TextureVertexShader(VertexShaderInput input)
 {
 	// Allocate an empty output struct
 	VertexShaderOutput output = (VertexShaderOutput)0;
@@ -202,4 +240,4 @@ technique TextureTechnique
 		VertexShader = compile vs_2_0 TextureVertexShader();
 		PixelShader = compile ps_2_0 TexturePixelShader();
 	}
-}
+}*/

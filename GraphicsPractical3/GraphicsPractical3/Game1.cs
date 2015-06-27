@@ -20,7 +20,7 @@ namespace GraphicsPractical3
 
         // Game objects and variables
         private Camera camera;
-        private Vector3 Light;
+        private Vector3 light;
 
         // Model
         private Model model;
@@ -31,6 +31,10 @@ namespace GraphicsPractical3
         private short[] quadIndices;
         private Matrix quadTransform;
         private Texture2D texture;
+
+        //Effect on Space
+        string sEffect;
+        int teller;
 
         public Game1()
         {
@@ -79,11 +83,15 @@ namespace GraphicsPractical3
             this.modelMaterial.SpecularColor = Color.White;
             this.modelMaterial.SpecularIntensity = 2.0f;
             this.modelMaterial.SpecularPower = 25.0f;
-            this.Light = new Vector3(50, 50, 50);
+            this.light = new Vector3(50, 50, 50);
 
             // Load Texture
             texture = Content.Load<Texture2D>("Textures/CobblestonesDiffuse");
 
+            //Start Effect
+            sEffect = "Simple";
+            teller = 0;
+            
             // Setup the quad
             this.setupQuad();
         }
@@ -123,7 +131,60 @@ namespace GraphicsPractical3
 
         protected override void Update(GameTime gameTime)
         {
-            float timeStep = (float)gameTime.ElapsedGameTime.TotalSeconds * 60.0f;
+            //float timeStep = (float)gameTime.ElapsedGameTime.TotalSeconds * 60.0f;
+            float timeStep = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            float deltaAngleY = 0;
+            float deltaAngleX = 0;
+            KeyboardState kbState = Keyboard.GetState();
+                        
+            if (kbState.IsKeyUp(Keys.Space))
+            {
+                teller ++;
+                int i = teller % 4;
+                switch(i)
+                {
+                    case 0:
+                        sEffect = "Simple";
+                        break;
+
+                    case 1: 
+                        sEffect = "Test";
+                        break;
+
+                    case 2: 
+                        sEffect = "Simple";
+                        break;
+
+                    case 3: 
+                        sEffect = "Test";
+                        break;
+
+                    default:
+                        sEffect = "Simple";
+                        break;
+                }
+
+            }
+
+            //CameraPosition Rotations
+            if (kbState.IsKeyDown(Keys.Left))
+                deltaAngleY += -3 * timeStep;
+            if (kbState.IsKeyDown(Keys.Right))
+                deltaAngleY += 3 * timeStep;
+            if (deltaAngleY != 0)
+                this.camera.Eye = Vector3.Transform(this.camera.Eye, Matrix.CreateRotationY(deltaAngleY));
+
+            if (kbState.IsKeyDown(Keys.Down))
+                deltaAngleX += -3 * timeStep;
+            if (kbState.IsKeyDown(Keys.Up))
+                deltaAngleX += 3 * timeStep;
+            if (deltaAngleX != 0)
+                this.camera.Eye = Vector3.Transform(this.camera.Eye, Matrix.CreateRotationX(deltaAngleX));
+
+            //exit game on backbutton press on controller
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+                this.Exit();
 
             // Update the window title
             this.Window.Title = "XNA Renderer | FPS: " + this.frameRateCounter.FrameRate;
@@ -139,17 +200,17 @@ namespace GraphicsPractical3
             // Get the model's only mesh
             ModelMesh mesh = this.model.Meshes[0];
             Effect effect = mesh.Effects[0];
-            Effect TextureEffect = mesh.Effects[0];
-
+            //Effect TextureEffect = mesh.Effects[0];
+           
             // Set the effect parameters, Color, LightSource, Ambient and specular
             effect.Parameters["DiffuseColor"].SetValue(modelMaterial.DiffuseColor.ToVector4());
-            effect.Parameters["PointLight"].SetValue(Light);
+            effect.Parameters["PointLight"].SetValue(light);
             effect.Parameters["AmbientColor"].SetValue(modelMaterial.AmbientColor.ToVector4());
             effect.Parameters["AmbientIntensity"].SetValue(modelMaterial.AmbientIntensity);
             effect.Parameters["SpecularColor"].SetValue(modelMaterial.SpecularColor.ToVector4());
             effect.Parameters["SpecularPower"].SetValue(modelMaterial.SpecularPower);
             effect.Parameters["SpecularIntensity"].SetValue(modelMaterial.SpecularIntensity);
-            effect.CurrentTechnique = effect.Techniques["Simple"];
+            effect.CurrentTechnique = effect.Techniques[sEffect];
             // Matrices for 3D perspective projection
             this.camera.SetEffectParameters(effect);
 
@@ -163,6 +224,7 @@ namespace GraphicsPractical3
             // Draw the model
             mesh.Draw();
 
+            /*
             //Adding Texture
             TextureEffect.Parameters["Texture"].SetValue(this.texture);
             TextureEffect.Parameters["World"].SetValue(this.quadTransform);
@@ -173,7 +235,7 @@ namespace GraphicsPractical3
             {
                 pass.Apply();
                 GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, this.quadVertices, 0, 4, this.quadIndices, 0, 2);
-            }
+            }*/
 
             base.Draw(gameTime);
         }
