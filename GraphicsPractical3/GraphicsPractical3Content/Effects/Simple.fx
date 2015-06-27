@@ -185,11 +185,8 @@ VertexShaderOutput TestVertexShader(VertexShaderInput input)
 
 float4 TestPixelShader(VertexShaderOutput input) : COLOR0
 {
-	//Uncomment the one you want to see
-	//float4 color = NormalColor(input); //1.1
-	float4 color = ProceduralColor(input); //1.2
-	//float4 color = LambertianLighting(input); //(2.1 + 2.2)
-	//float4 color = PhongLighting(input);	//2.3,2.4
+	float4 color = ProceduralColor(input);
+
 	return color;
 }
 technique Test

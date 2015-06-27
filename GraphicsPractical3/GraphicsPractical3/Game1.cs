@@ -86,7 +86,7 @@ namespace GraphicsPractical3
             this.modelMaterial.SpecularColor = Color.White;
             this.modelMaterial.SpecularIntensity = 2.0f;
             this.modelMaterial.SpecularPower = 25.0f;
-            this.light = new Vector3(50, 50, 50);
+            this.light = new Vector3(50,50,50);
 
             // Load Texture
             texture = Content.Load<Texture2D>("Textures/CobblestonesDiffuse");
@@ -206,16 +206,12 @@ namespace GraphicsPractical3
             if (deltaAngleY != 0)
                 this.camera.Eye = Vector3.Transform(this.camera.Eye, Matrix.CreateRotationY(deltaAngleY));
 
-            if (kbState.IsKeyDown(Keys.Down))
-                deltaAngleX += -3 * timeStep;
             if (kbState.IsKeyDown(Keys.Up))
+                deltaAngleX += -3 * timeStep;
+            if (kbState.IsKeyDown(Keys.Down))
                 deltaAngleX += 3 * timeStep;
             if (deltaAngleX != 0)
                 this.camera.Eye = Vector3.Transform(this.camera.Eye, Matrix.CreateRotationX(deltaAngleX));
-
-            //exit game on backbutton press on controller
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
 
             // Update the window title
             this.Window.Title = "XNA Renderer | FPS: " + this.frameRateCounter.FrameRate;
