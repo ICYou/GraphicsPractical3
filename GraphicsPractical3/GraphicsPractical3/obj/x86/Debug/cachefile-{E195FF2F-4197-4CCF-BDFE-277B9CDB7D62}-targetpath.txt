@@ -2,3 +2,5 @@ Content\Textures\CobblestonesDiffuse.xnb
 Content\Effects\Simple.xnb
 Content\Models\Teapot.xnb
 Content\Normal Maps\CobblestonesNormal.xnb
+Content\Models\bunny.xnb
+Content\Models\femalehead.xnb

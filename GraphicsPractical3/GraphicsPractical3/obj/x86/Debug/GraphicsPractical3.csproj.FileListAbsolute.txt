@@ -8,3 +8,5 @@ C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\Gra
 C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\bin\x86\Debug\GraphicsPractical3.pdb
 C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\obj\x86\Debug\GraphicsPractical3.exe
 C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\obj\x86\Debug\GraphicsPractical3.pdb
+C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\bin\x86\Debug\Content\Models\bunny.xnb
+C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\bin\x86\Debug\Content\Models\femalehead.xnb

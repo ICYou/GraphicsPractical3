@@ -37,6 +37,7 @@ namespace GraphicsPractical3
         int teller;
         int iSwitch;
         bool b;
+        float size;
 
         public Game1()
         {
@@ -95,6 +96,7 @@ namespace GraphicsPractical3
             teller = 0;
             iSwitch = 0;
             b = true;
+            size = 10.0f;
             
             // Setup the quad
             this.setupQuad();
@@ -148,29 +150,45 @@ namespace GraphicsPractical3
                 {
                     teller++;
                     b = false;
-                    iSwitch = teller % 4;                    
+                    iSwitch = teller % 4;
                 }
+                Effect effect = this.Content.Load<Effect>("Effects/Simple");               
 
                 switch(iSwitch)
                 {
                     case 0:
                         sEffect = "Simple";
+                        this.model = this.Content.Load<Model>("Models/Teapot");
+                        this.model.Meshes[0].MeshParts[0].Effect = effect;
+                        size = 10.0f;
                         break;
 
                     case 1: 
                         sEffect = "Test";
+                        this.model = this.Content.Load<Model>("Models/femalehead");
+                        this.model.Meshes[0].MeshParts[0].Effect = effect;
+                        size = 1.0f;
                         break;
 
                     case 2: 
-                        sEffect = "Simple";
+                        sEffect = "Simple";                        
+                        this.model = this.Content.Load<Model>("Models/bunny");
+                        this.model.Meshes[0].MeshParts[0].Effect = effect;
+                        size = 200.0f;
                         break;
 
                     case 3: 
-                        sEffect = "Test";
+                        sEffect = "Test";                        
+                        this.model = this.Content.Load<Model>("Models/Teapot");
+                        this.model.Meshes[0].MeshParts[0].Effect = effect;
+                        size = 10.0f;
                         break;
 
                     default:
-                        sEffect = "Simple";
+                        sEffect = "Simple";                        
+                        this.model = this.Content.Load<Model>("Models/femalehead");
+                        this.model.Meshes[0].MeshParts[0].Effect = effect;
+                        size = 1.0f;
                         break;
                 }
 
@@ -227,7 +245,7 @@ namespace GraphicsPractical3
             // Matrices for 3D perspective projection
             this.camera.SetEffectParameters(effect);
 
-            Matrix World = Matrix.CreateScale(10.0f);
+            Matrix World = Matrix.CreateScale(size);
 
             Matrix InversedTransposedWorld = Matrix.Invert(Matrix.Transpose(World));
 
