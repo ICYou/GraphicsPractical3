@@ -11,13 +11,22 @@
       <Time>2015-05-12T10:24:36+02:00</Time>
     </Item>
     <Item>
+      <Source>Normal Maps\CobblestonesNormal.png</Source>
+      <Name>Normal Maps\CobblestonesNormal</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <Options>None</Options>
+      <Output>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\bin\x86\Debug\Content\Normal Maps\CobblestonesNormal.xnb</Output>
+      <Time>2015-05-12T10:24:36+02:00</Time>
+    </Item>
+    <Item>
       <Source>Effects\Simple.fx</Source>
       <Name>Effects\Simple</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\bin\x86\Debug\Content\Effects\Simple.xnb</Output>
-      <Time>2015-06-28T13:38:47.9365888+02:00</Time>
+      <Time>2015-06-28T13:47:41.4388843+02:00</Time>
     </Item>
     <Item>
       <Source>Models\Teapot.fbx</Source>
@@ -29,24 +38,8 @@
       <Time>2015-06-01T17:30:32+02:00</Time>
       <Dependency>
         <Key>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\obj\x86\Debug\Models\Teapot_0.xml</Key>
-        <Value>2015-06-12T11:59:55.722318+02:00</Value>
+        <Value>2015-06-28T13:49:30.3151369+02:00</Value>
       </Dependency>
-    </Item>
-    <Item>
-      <Source>Models\Teapot.fbx</Source>
-      <Importer>FbxImporter</Importer>
-      <Options>IntermediateFile, DontCacheImportedData</Options>
-      <Output>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\obj\x86\Debug\Models\Teapot_0.xml</Output>
-      <Time>2015-06-01T17:30:32+02:00</Time>
-    </Item>
-    <Item>
-      <Source>Normal Maps\CobblestonesNormal.png</Source>
-      <Name>Normal Maps\CobblestonesNormal</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <Options>None</Options>
-      <Output>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\bin\x86\Debug\Content\Normal Maps\CobblestonesNormal.xnb</Output>
-      <Time>2015-05-12T10:24:36+02:00</Time>
     </Item>
     <Item>
       <Source>Models\bunny.fbx</Source>
@@ -58,7 +51,7 @@
       <Time>2015-06-27T15:51:14.1421609+02:00</Time>
       <Dependency>
         <Key>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\obj\x86\Debug\Models\bunny_0.xml</Key>
-        <Value>2015-06-27T15:53:23.4642937+02:00</Value>
+        <Value>2015-06-28T13:49:30.5502873+02:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -71,8 +64,15 @@
       <Time>2015-06-27T15:51:52.67846+02:00</Time>
       <Dependency>
         <Key>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\obj\x86\Debug\Models\femalehead_0.xml</Key>
-        <Value>2015-06-27T15:53:24.1177427+02:00</Value>
+        <Value>2015-06-28T13:49:30.9655072+02:00</Value>
       </Dependency>
+    </Item>
+    <Item>
+      <Source>Models\Teapot.fbx</Source>
+      <Importer>FbxImporter</Importer>
+      <Options>IntermediateFile, DontCacheImportedData</Options>
+      <Output>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\obj\x86\Debug\Models\Teapot_0.xml</Output>
+      <Time>2015-06-01T17:30:32+02:00</Time>
     </Item>
     <Item>
       <Source>Models\bunny.fbx</Source>
@@ -92,7 +92,7 @@
     <Settings>
       <ContentProjectGUID>{E195FF2F-4197-4CCF-BDFE-277B9CDB7D62}</ContentProjectGUID>
       <TargetPlatform>Windows</TargetPlatform>
-      <TargetProfile>Reach</TargetProfile>
+      <TargetProfile>HiDef</TargetProfile>
       <BuildConfiguration>Debug</BuildConfiguration>
       <CompressContent>false</CompressContent>
       <RootDirectory>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3Content\</RootDirectory>

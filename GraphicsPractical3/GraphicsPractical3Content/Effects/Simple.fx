@@ -183,8 +183,8 @@ technique Simple
 {
 	pass Pass0
 	{
-		VertexShader = compile vs_2_0 SimpleVertexShader();
-		PixelShader = compile ps_2_0 SimplePixelShader();
+		VertexShader = compile vs_3_0 SimpleVertexShader();
+		PixelShader = compile ps_3_0 SimplePixelShader();
 	}
 }
 
@@ -216,8 +216,8 @@ technique CellShader
 {
 	pass Pass0
 	{
-		VertexShader = compile vs_2_0 CellShaderVertexShader();
-		PixelShader = compile ps_2_0 CellShaderPixelShader();
+		VertexShader = compile vs_3_0 CellShaderVertexShader();
+		PixelShader = compile ps_3_0 CellShaderPixelShader();
 	}
 }
 
