@@ -123,6 +123,30 @@ float4 PhongLighting(VertexShaderOutput input)
 		return diffColor + ambColor + specColor;
 }
 
+// Cell Shading
+float4 CellShading(VertexShaderOutput input)
+{
+	
+	float3 normal = mul(input.Normal, InversedTransposedWorld);
+
+		//lambertian calculation (2.1)
+		float DiffuseIntensity = max(0, saturate(dot(input.Normal, normalize(PointLight - normal))));
+	if (DiffuseIntensity >= 0 && DiffuseIntensity <= 0.25)
+		DiffuseIntensity = 0;
+	else if (DiffuseIntensity > 0.25 && DiffuseIntensity <= 0.50)
+		DiffuseIntensity = 0.25;
+	else if (DiffuseIntensity > 0.50 && DiffuseIntensity <= 0.75)
+		DiffuseIntensity = 0.50;
+	else 
+		DiffuseIntensity = 0.75;
+
+		float4 diffColor = DiffuseColor * DiffuseIntensity;
+		//ambientcolor calculation (2.2)
+		float4 ambColor = AmbientColor * AmbientIntensity;
+		
+	return diffColor + ambColor;
+}
+
 //---------------------------------------- Technique: Simple ----------------------------------------
 
 VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
@@ -151,6 +175,7 @@ float4 SimplePixelShader(VertexShaderOutput input) : COLOR0
 	//float4 color = ProceduralColor(input); //1.2
 	//float4 color = LambertianLighting(input); //(2.1 + 2.2)
 	float4 color = PhongLighting(input);	//2.3,2.4
+	//float4 color = CellShading(input);
 	return color;
 }
 
@@ -163,8 +188,9 @@ technique Simple
 	}
 }
 
-//---------------------------------------- Technique: TestTechnique ----------------------------------------
-VertexShaderOutput TestVertexShader(VertexShaderInput input)
+//---------------------------------------- Technique: CellShading ----------------------------------------
+
+VertexShaderOutput CellShaderVertexShader(VertexShaderInput input)
 {
 	// Allocate an empty output struct
 	VertexShaderOutput output = (VertexShaderOutput)0;
@@ -174,27 +200,24 @@ VertexShaderOutput TestVertexShader(VertexShaderInput input)
 		float4 viewPosition = mul(worldPosition, View);
 		output.Position2D = mul(viewPosition, Projection);
 
-	//1.1 Coloring using normals (add normal values to the output, so it can be used for coloring)
 	output.Normal = input.Normal3D;
-
-	//1.2 Checkerboard pattern (add pixel coordinates)
 	output.Position3D = input.Position3D;
 
 	return output;
 }
 
-float4 TestPixelShader(VertexShaderOutput input) : COLOR0
+float4 CellShaderPixelShader(VertexShaderOutput input) : COLOR0
 {
-	float4 color = ProceduralColor(input);
-
+	float4 color = CellShading(input);
 	return color;
 }
-technique Test
+
+technique CellShader
 {
 	pass Pass0
 	{
-		VertexShader = compile vs_2_0 TestVertexShader();
-		PixelShader = compile ps_2_0 TestPixelShader();
+		VertexShader = compile vs_2_0 CellShaderVertexShader();
+		PixelShader = compile ps_2_0 CellShaderPixelShader();
 	}
 }
 

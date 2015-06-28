@@ -164,7 +164,7 @@ namespace GraphicsPractical3
                         break;
 
                     case 1: 
-                        sEffect = "Test";
+                        sEffect = "CellShader";
                         this.model = this.Content.Load<Model>("Models/femalehead");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
                         size = 1.0f;
@@ -178,7 +178,7 @@ namespace GraphicsPractical3
                         break;
 
                     case 3: 
-                        sEffect = "Test";                        
+                        sEffect = "CellShader";                        
                         this.model = this.Content.Load<Model>("Models/Teapot");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
                         size = 10.0f;
