@@ -57,7 +57,7 @@ namespace GraphicsPractical3
             this.graphics.PreferredBackBufferHeight = 600;
             this.graphics.IsFullScreen = false;
             // Let the renderer draw and update as often as possible
-            this.graphics.SynchronizeWithVerticalRetrace = false;
+            this.graphics.SynchronizeWithVerticalRetrace = true;
             this.IsFixedTimeStep = false;
             // Flush the changes to the device parameters to the graphics card
             this.graphics.ApplyChanges();
@@ -156,7 +156,7 @@ namespace GraphicsPractical3
                 {
                     teller++;
                     b = false;
-                    iSwitch = teller % 4;
+                    iSwitch = teller % 5;
                 }
                 Effect effect = this.Content.Load<Effect>("Effects/Simple");               
 
@@ -173,7 +173,7 @@ namespace GraphicsPractical3
                         sEffect = "CellShader";
                         this.model = this.Content.Load<Model>("Models/femalehead");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
-                        size = 1.0f;
+                        size = 2.0f;
                         break;
 
                     case 2: 
@@ -188,6 +188,13 @@ namespace GraphicsPractical3
                         this.model = this.Content.Load<Model>("Models/Teapot");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
                         size = 10.0f;
+                        break;
+
+                    case 4:
+                        sEffect = "Simple";
+                        this.model = this.Content.Load<Model>("Models/femalehead");
+                        this.model.Meshes[0].MeshParts[0].Effect = effect;
+                        size = 2.0f;
                         break;
 
                     default:

@@ -152,11 +152,21 @@ float4 CellShading(VertexShaderOutput input)
 	else 
 		DiffuseIntensity = 0.75;
 
-		float4 diffColor = DiffuseColor * DiffuseIntensity;
-		//ambientcolor calculation (2.2)
+	float4 diffColor = DiffuseColor * DiffuseIntensity;
+	
 		float4 ambColor = AmbientColor * AmbientIntensity;
+
+	float4 color = diffColor + ambColor ;
+	//float colorcheck = ddx(diffColor + ambColor) + ddy(diffColor + ambColor);
+
+	/*if (colorcheck != 0)
+	{
+		diffColor = DiffuseColor * max(0, saturate(dot(input.Normal, normalize(PointLight[0] - normal))));
+		ambColor = AmbientColor * AmbientIntensity;
+		color = diffColor + ambColor;
+	}*/
 		
-	return diffColor + ambColor;
+		return color;
 }
 
 //---------------------------------------- Technique: Simple ----------------------------------------
