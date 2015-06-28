@@ -1,6 +1,7 @@
 //------------------------------------------- Defines -------------------------------------------
 
 #define Pi 3.14159265
+#define MAX_LIGHTS 5
 
 //------------------------------------- Top Level Variables -------------------------------------
 
@@ -10,7 +11,8 @@
 float4x4 View, Projection, World, InversedTransposedWorld;
 float4 DiffuseColor, AmbientColor, SpecularColor;
 float AmbientIntensity, SpecularIntensity, SpecularPower;
-float3 CameraPosition, PointLight;
+float3 CameraPosition;
+float3 PointLight[MAX_LIGHTS];
 
 /*texture Texture;
 sampler TextureSampler : register(s0)
@@ -111,15 +113,25 @@ float4 PhongLighting(VertexShaderOutput input)
 		float3 normal = mul(input.Normal, InversedTransposedWorld);
 
 		//lambertian calculation (2.1)
-		float4 diffColor = DiffuseColor * max(0, saturate(dot(input.Normal, normalize(PointLight - normal))));
+		float DiffuseIntensity = 0;
+		float SpecPow = 0;
+	
+		for (int i = 0; i < MAX_LIGHTS; i++)
+		{
+			DiffuseIntensity += max(0, saturate(dot(input.Normal, normalize(PointLight[i] - normal))));
+		
+			float3 lightVector = normalize(PointLight[i] - input.Position3D);
+			float3 viewVector = normalize(CameraPosition - input.Position3D);
+			float3 halfVector = normalize(lightVector + viewVector);
+			SpecPow += pow(saturate(dot(input.Normal, halfVector)), SpecularPower);
+		}
+		float4 diffColor = DiffuseColor * DiffuseIntensity;
 		//ambientcolor calculation (2.2)
 		float4 ambColor = AmbientColor * AmbientIntensity;
 		//specular calculation (2.3)
-		float3 lightVector = normalize(PointLight - input.Position3D);
-		float3 viewVector = normalize(CameraPosition - input.Position3D);
-		float3 halfVector = normalize(lightVector + viewVector);
-		float specColor = SpecularColor * pow(saturate(dot(input.Normal, halfVector)), SpecularPower) * SpecularIntensity;
-
+		
+		float specColor = SpecularColor * SpecPow * SpecularIntensity;
+		
 		return diffColor + ambColor + specColor;
 }
 
@@ -130,7 +142,7 @@ float4 CellShading(VertexShaderOutput input)
 	float3 normal = mul(input.Normal, InversedTransposedWorld);
 
 		//lambertian calculation (2.1)
-		float DiffuseIntensity = max(0, saturate(dot(input.Normal, normalize(PointLight - normal))));
+		float DiffuseIntensity = max(0, saturate(dot(input.Normal, normalize(PointLight[0] - normal))));
 	if (DiffuseIntensity >= 0 && DiffuseIntensity <= 0.25)
 		DiffuseIntensity = 0;
 	else if (DiffuseIntensity > 0.25 && DiffuseIntensity <= 0.50)

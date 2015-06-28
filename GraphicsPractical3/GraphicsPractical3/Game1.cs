@@ -20,7 +20,7 @@ namespace GraphicsPractical3
 
         // Game objects and variables
         private Camera camera;
-        private Vector3 light;
+        private Vector3[] light;
 
         // Model
         private Model model;
@@ -77,6 +77,7 @@ namespace GraphicsPractical3
             Effect effect = this.Content.Load<Effect>("Effects/Simple");
             // Load the model and let it use the "Simple" effect
             this.model = this.Content.Load<Model>("Models/Teapot");
+            
             this.model.Meshes[0].MeshParts[0].Effect = effect;
 
             // Set Diffuse- & ambientcolor, ambient intensity, light direction, and specular color and intensity
@@ -86,7 +87,12 @@ namespace GraphicsPractical3
             this.modelMaterial.SpecularColor = Color.White;
             this.modelMaterial.SpecularIntensity = 2.0f;
             this.modelMaterial.SpecularPower = 25.0f;
-            this.light = new Vector3(50,50,50);
+            this.light = new Vector3[5];
+            this.light[0] = new Vector3(50, 50, 50);
+            this.light[1] = new Vector3(1000, 0, 50);
+            this.light[2] = new Vector3(0, 50, 1000);
+            this.light[3] = new Vector3(-50, 0, -50);
+            this.light[4] = new Vector3(-100, -100, 0);
 
             // Load Texture
             texture = Content.Load<Texture2D>("Textures/CobblestonesDiffuse");
