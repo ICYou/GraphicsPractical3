@@ -14,7 +14,7 @@ float AmbientIntensity, SpecularIntensity, SpecularPower;
 float3 CameraPosition;
 float3 PointLight[MAX_LIGHTS];
 
-/*texture Texture;
+texture Texture;
 sampler TextureSampler : register(s0)
 {
 	Texture = (Texture);
@@ -23,7 +23,7 @@ sampler TextureSampler : register(s0)
 	MipFilter = Linear;
 	AddressU = Wrap;
 	AddressV = Wrap;
-};*/
+};
 
 //---------------------------------- Input / Output structures ----------------------------------
 
@@ -242,7 +242,27 @@ technique CellShader
 		PixelShader = compile ps_3_0 CellShaderPixelShader();
 	}
 }
+//---------------------------------------- Technique: GreyScaleTechnique ----------------------------------------
 
+
+float4 GrayscalePixelShader(float2 TextureCoordinate : TEXCOORD0) : COLOR0
+{	
+	float4 color = tex2D(TextureSampler, TextureCoordinate);
+
+	// Turn pixel to grayscale.
+	color = dot(color.rgb, float3(0.3, 0.59, 0.11));
+	//color.a = 0;
+	
+	return color;
+}
+
+technique Greyscale
+{
+	pass Pass0
+	{
+		PixelShader = compile ps_2_0 GrayscalePixelShader();
+	}
+}
 
 //---------------------------------------- Technique: TextureTechnique ----------------------------------------
 /*VertexShaderOutput TextureVertexShader(VertexShaderInput input)

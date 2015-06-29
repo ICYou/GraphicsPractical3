@@ -38,6 +38,7 @@ namespace GraphicsPractical3
         int iSwitch;
         bool b;
         float size;
+        bool greyScale;
 
         public Game1()
         {
@@ -103,6 +104,7 @@ namespace GraphicsPractical3
             iSwitch = 0;
             b = true;
             size = 10.0f;
+            greyScale = false;
             
             // Setup the quad
             this.setupQuad();
@@ -156,27 +158,38 @@ namespace GraphicsPractical3
                 {
                     teller++;
                     b = false;
-                    iSwitch = teller % 2;
+                    iSwitch = teller % 3;
                 }
                 Effect effect = this.Content.Load<Effect>("Effects/Simple");               
 
                 switch(iSwitch)
                 {
                     case 0:
+                        greyScale = false;
                         sEffect = "Simple";
                         this.model = this.Content.Load<Model>("Models/Teapot");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
                         size = 10.0f;
                         break;
 
-                    case 1: 
+                    case 1:
+                        greyScale = false;
                         sEffect = "CellShader";
                         this.model = this.Content.Load<Model>("Models/femalehead");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
                         size = 2.0f;
                         break;
 
+                    case 2:
+                        greyScale = true;
+                        sEffect = "Simple";
+                        this.model = this.Content.Load<Model>("Models/Teapot");
+                        this.model.Meshes[0].MeshParts[0].Effect = effect;
+                        size = 10.0f;
+                        break;
+
                     default:
+                        greyScale = false;
                         sEffect = "Simple";                        
                         this.model = this.Content.Load<Model>("Models/femalehead");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
@@ -215,13 +228,26 @@ namespace GraphicsPractical3
         {
             // Clear the screen in a predetermined color and clear the depth buffer
             this.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DeepSkyBlue, 1.0f, 0);
+           
+            
+            PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
+            RenderTarget2D renderTarget;
+            Rectangle screenRectangle = new Rectangle(0, 0, 800, 600);
+            renderTarget = new RenderTarget2D(this.GraphicsDevice, 800, 600, true, pp.BackBufferFormat, pp.DepthStencilFormat);
+
 
             // Get the model's only mesh
             ModelMesh mesh = this.model.Meshes[0];
             Effect effect = mesh.Effects[0];
             //Effect TextureEffect = mesh.Effects[0];
             Effect postProcess = mesh.Effects[0];
-           
+            if(greyScale)
+            {
+                this.GraphicsDevice.SetRenderTarget(renderTarget);
+                this.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DeepSkyBlue, 1.0f, 0);
+            }
+            
+
             // Set the effect parameters, Color, LightSource, Ambient and specular
             effect.Parameters["DiffuseColor"].SetValue(modelMaterial.DiffuseColor.ToVector4());
             effect.Parameters["PointLight"].SetValue(light);
@@ -243,7 +269,19 @@ namespace GraphicsPractical3
 
             // Draw the model
             mesh.Draw();
-                                    
+
+            if(greyScale)
+            {
+                this.GraphicsDevice.SetRenderTarget(null);
+
+                effect.CurrentTechnique = effect.Techniques["Greyscale"];
+
+                spriteBatch.Begin(0, BlendState.Opaque, null, null, null, effect);
+                spriteBatch.Draw((Texture2D)renderTarget, screenRectangle, Color.White);
+                spriteBatch.End();
+            }
+            
+              
             base.Draw(gameTime);
         }
     }
