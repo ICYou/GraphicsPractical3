@@ -242,25 +242,24 @@ technique CellShader
 		PixelShader = compile ps_3_0 CellShaderPixelShader();
 	}
 }
-//---------------------------------------- Technique: GreyScaleTechnique ----------------------------------------
+//---------------------------------------- Technique: ColorFilterTechnique ----------------------------------------
 
 
-float4 GrayscalePixelShader(float2 TextureCoordinate : TEXCOORD0) : COLOR0
+float4 ColorFilterPixelShader(float2 TextureCoordinate : TEXCOORD0) : COLOR0
 {	
 	float4 color = tex2D(TextureSampler, TextureCoordinate);
 
-	// Turn pixel to grayscale.
-	color = dot(color.rgb, float3(0.3, 0.59, 0.11));
-	//color.a = 0;
+	float3 greyValues = (0.3, 0.59, 0.11);
+	color = dot(color.rgb, greyValues);
 	
 	return color;
 }
 
-technique Greyscale
+technique ColorFilter
 {
 	pass Pass0
 	{
-		PixelShader = compile ps_2_0 GrayscalePixelShader();
+		PixelShader = compile ps_2_0 ColorFilterPixelShader();
 	}
 }
 

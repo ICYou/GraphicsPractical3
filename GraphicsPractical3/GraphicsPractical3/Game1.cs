@@ -38,7 +38,10 @@ namespace GraphicsPractical3
         int iSwitch;
         bool b;
         float size;
-        bool greyScale;
+        bool colorFilter;
+        RenderTarget2D renderTarget;
+        Rectangle screenRectangle;
+        PresentationParameters presParameters;
 
         public Game1()
         {
@@ -58,7 +61,7 @@ namespace GraphicsPractical3
             this.graphics.PreferredBackBufferHeight = 600;
             this.graphics.IsFullScreen = false;
             // Let the renderer draw and update as often as possible
-            this.graphics.SynchronizeWithVerticalRetrace = true;
+            this.graphics.SynchronizeWithVerticalRetrace = false;
             this.IsFixedTimeStep = false;
             // Flush the changes to the device parameters to the graphics card
             this.graphics.ApplyChanges();
@@ -104,7 +107,10 @@ namespace GraphicsPractical3
             iSwitch = 0;
             b = true;
             size = 10.0f;
-            greyScale = false;
+            colorFilter = false;
+            presParameters = this.GraphicsDevice.PresentationParameters;
+            renderTarget = new RenderTarget2D(this.GraphicsDevice, 800, 600, true, presParameters.BackBufferFormat, presParameters.DepthStencilFormat);
+            screenRectangle = new Rectangle(0, 0, 800, 600);
             
             // Setup the quad
             this.setupQuad();
@@ -165,7 +171,7 @@ namespace GraphicsPractical3
                 switch(iSwitch)
                 {
                     case 0:
-                        greyScale = false;
+                        colorFilter = false;
                         sEffect = "Simple";
                         this.model = this.Content.Load<Model>("Models/Teapot");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
@@ -173,7 +179,7 @@ namespace GraphicsPractical3
                         break;
 
                     case 1:
-                        greyScale = false;
+                        colorFilter = false;
                         sEffect = "CellShader";
                         this.model = this.Content.Load<Model>("Models/femalehead");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
@@ -181,7 +187,7 @@ namespace GraphicsPractical3
                         break;
 
                     case 2:
-                        greyScale = true;
+                        colorFilter = true;
                         sEffect = "Simple";
                         this.model = this.Content.Load<Model>("Models/Teapot");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
@@ -189,7 +195,7 @@ namespace GraphicsPractical3
                         break;
 
                     default:
-                        greyScale = false;
+                        colorFilter = false;
                         sEffect = "Simple";                        
                         this.model = this.Content.Load<Model>("Models/femalehead");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
@@ -230,24 +236,22 @@ namespace GraphicsPractical3
             this.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DeepSkyBlue, 1.0f, 0);
            
             
-            PresentationParameters pp = this.GraphicsDevice.PresentationParameters;
-            RenderTarget2D renderTarget;
-            Rectangle screenRectangle = new Rectangle(0, 0, 800, 600);
-            renderTarget = new RenderTarget2D(this.GraphicsDevice, 800, 600, true, pp.BackBufferFormat, pp.DepthStencilFormat);
+                        
+            if(colorFilter)
+            {
+                this.GraphicsDevice.SetRenderTarget(renderTarget);
+                //this.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DeepSkyBlue, 1.0f, 0);               
 
+            }
+            
 
             // Get the model's only mesh
             ModelMesh mesh = this.model.Meshes[0];
             Effect effect = mesh.Effects[0];
             //Effect TextureEffect = mesh.Effects[0];
-            Effect postProcess = mesh.Effects[0];
-            if(greyScale)
-            {
-                this.GraphicsDevice.SetRenderTarget(renderTarget);
-                this.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DeepSkyBlue, 1.0f, 0);
-            }
-            
+            //Effect postProcess = mesh.Effects[0];
 
+            
             // Set the effect parameters, Color, LightSource, Ambient and specular
             effect.Parameters["DiffuseColor"].SetValue(modelMaterial.DiffuseColor.ToVector4());
             effect.Parameters["PointLight"].SetValue(light);
@@ -266,18 +270,21 @@ namespace GraphicsPractical3
 
             effect.Parameters["World"].SetValue(World);
             effect.Parameters["InversedTransposedWorld"].SetValue(InversedTransposedWorld);
+           
+            this.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+            this.GraphicsDevice.BlendState = BlendState.Opaque;
 
             // Draw the model
             mesh.Draw();
 
-            if(greyScale)
+            if(colorFilter)
             {
                 this.GraphicsDevice.SetRenderTarget(null);
 
-                effect.CurrentTechnique = effect.Techniques["Greyscale"];
+                effect.CurrentTechnique = effect.Techniques["ColorFilter"];
 
                 spriteBatch.Begin(0, BlendState.Opaque, null, null, null, effect);
-                spriteBatch.Draw((Texture2D)renderTarget, screenRectangle, Color.White);
+                spriteBatch.Draw(renderTarget, screenRectangle, Color.AliceBlue);
                 spriteBatch.End();
             }
             
