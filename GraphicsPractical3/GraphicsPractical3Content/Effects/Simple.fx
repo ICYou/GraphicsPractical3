@@ -56,56 +56,6 @@ struct VertexShaderOutput
 
 //------------------------------------------ Functions ------------------------------------------
 
-// Implement the Coloring using normals assignment here
-/*float4 NormalColor(VertexShaderOutput input)
-{
-	return float4(input.Normal.x, input.Normal.y, input.Normal.z, 1);
-}*/
-
-// Implement the Procedural texturing assignment here
-float4 ProceduralColor(VertexShaderOutput input)
-{
-	//1.2 Checkerboard pattern
-	int checkerSize = 5;
-	float X = input.Position3D.x;
-	float Y = input.Position3D.y;
-
-	//Avoid mirroring on the negative axis.
-	if (X < 0)
-		X--;
-	if (Y < 0)
-		Y--;
-
-	bool x = (int)(X * checkerSize) % 2;
-	bool y = (int)(Y * checkerSize) % 2;
-
-	bool test = x != y;
-
-	if (test)
-	{
-		return float4(-input.Normal.x, -input.Normal.y, -input.Normal.z, 1);
-	}
-	else
-	{
-		return float4(input.Normal.x, input.Normal.y, input.Normal.z, 1);
-	}
-}
-
-// LambertianLighting implementation
-/*float4 LambertianLighting(VertexShaderOutput input)
-{
-	float3x3 rotationAndScale = (float3x3) World;
-		float3 normal = mul(input.Normal, rotationAndScale);
-	
-		//lambertian calculation (2.1)
-		float4 diffColor = DiffuseColor * max(0, saturate(dot(input.Normal, normalize(PointLight - normal))));
-		
-		//ambientcolor calculation (2.2)
-		float4 ambColor = AmbientColor * AmbientIntensity;
-
-		return diffColor + ambColor;
-}*/
-
 // PhongLighting implementation
 float4 PhongLighting(VertexShaderOutput input)
 {		
@@ -250,7 +200,7 @@ float4 ColorFilterPixelShader(float2 TextureCoordinate : TEXCOORD0) : COLOR0
 	float4 color = tex2D(TextureSampler, TextureCoordinate);
 
 	float3 greyValues = (0.3, 0.59, 0.11);
-	color = dot(color.rgb, greyValues);
+	color = dot(color, greyValues);
 	
 	return color;
 }
@@ -262,6 +212,28 @@ technique ColorFilter
 		PixelShader = compile ps_2_0 ColorFilterPixelShader();
 	}
 }
+
+//---------------------------------------- Technique: GaussianBlurTechnique ----------------------------------------
+
+
+float4 GaussianBlurPixelShader(float2 TextureCoordinate : TEXCOORD0) : COLOR0
+{
+	float4 color = tex2D(TextureSampler, TextureCoordinate);
+
+	float3 greyValues = (0.3, 0.59, 0.11);
+	color = dot(color.rgb, greyValues);
+
+	return color;
+}
+
+technique GaussianBlur
+{
+	pass Pass0
+	{
+		PixelShader = compile ps_2_0 GaussianBlurPixelShader();
+	}
+}
+
 
 //---------------------------------------- Technique: TextureTechnique ----------------------------------------
 /*VertexShaderOutput TextureVertexShader(VertexShaderInput input)

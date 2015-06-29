@@ -39,6 +39,7 @@ namespace GraphicsPractical3
         bool b;
         float size;
         bool colorFilter;
+        bool postProcess;
         RenderTarget2D renderTarget;
         Rectangle screenRectangle;
         PresentationParameters presParameters;
@@ -108,6 +109,7 @@ namespace GraphicsPractical3
             b = true;
             size = 10.0f;
             colorFilter = false;
+            postProcess = false;
             presParameters = this.GraphicsDevice.PresentationParameters;
             renderTarget = new RenderTarget2D(this.GraphicsDevice, 800, 600, true, presParameters.BackBufferFormat, presParameters.DepthStencilFormat);
             screenRectangle = new Rectangle(0, 0, 800, 600);
@@ -164,7 +166,7 @@ namespace GraphicsPractical3
                 {
                     teller++;
                     b = false;
-                    iSwitch = teller % 3;
+                    iSwitch = teller % 4;
                 }
                 Effect effect = this.Content.Load<Effect>("Effects/Simple");               
 
@@ -172,6 +174,7 @@ namespace GraphicsPractical3
                 {
                     case 0:
                         colorFilter = false;
+                        postProcess = false;
                         sEffect = "Simple";
                         this.model = this.Content.Load<Model>("Models/Teapot");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
@@ -180,6 +183,7 @@ namespace GraphicsPractical3
 
                     case 1:
                         colorFilter = false;
+                        postProcess = false;
                         sEffect = "CellShader";
                         this.model = this.Content.Load<Model>("Models/femalehead");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
@@ -188,6 +192,16 @@ namespace GraphicsPractical3
 
                     case 2:
                         colorFilter = true;
+                        postProcess = true;
+                        sEffect = "Simple";
+                        this.model = this.Content.Load<Model>("Models/Teapot");
+                        this.model.Meshes[0].MeshParts[0].Effect = effect;
+                        size = 10.0f;
+                        break;
+
+                    case 3:
+                        colorFilter = false;
+                        postProcess = true;
                         sEffect = "Simple";
                         this.model = this.Content.Load<Model>("Models/Teapot");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
@@ -196,6 +210,7 @@ namespace GraphicsPractical3
 
                     default:
                         colorFilter = false;
+                        postProcess = false;
                         sEffect = "Simple";                        
                         this.model = this.Content.Load<Model>("Models/femalehead");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
@@ -237,7 +252,7 @@ namespace GraphicsPractical3
            
             
                         
-            if(colorFilter)
+            if(postProcess)
             {
                 this.GraphicsDevice.SetRenderTarget(renderTarget);
                 //this.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DeepSkyBlue, 1.0f, 0);               
@@ -277,11 +292,18 @@ namespace GraphicsPractical3
             // Draw the model
             mesh.Draw();
 
-            if(colorFilter)
+            if(postProcess)
             {
                 this.GraphicsDevice.SetRenderTarget(null);
 
-                effect.CurrentTechnique = effect.Techniques["ColorFilter"];
+                if(colorFilter)
+                {
+                    effect.CurrentTechnique = effect.Techniques["ColorFilter"];
+                }
+                else
+                {
+                    effect.CurrentTechnique = effect.Techniques["GaussianBlur"];
+                }
 
                 spriteBatch.Begin(0, BlendState.Opaque, null, null, null, effect);
                 spriteBatch.Draw(renderTarget, screenRectangle, Color.AliceBlue);
