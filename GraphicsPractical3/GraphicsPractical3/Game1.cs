@@ -156,7 +156,7 @@ namespace GraphicsPractical3
                 {
                     teller++;
                     b = false;
-                    iSwitch = teller % 5;
+                    iSwitch = teller % 2;
                 }
                 Effect effect = this.Content.Load<Effect>("Effects/Simple");               
 
@@ -171,27 +171,6 @@ namespace GraphicsPractical3
 
                     case 1: 
                         sEffect = "CellShader";
-                        this.model = this.Content.Load<Model>("Models/femalehead");
-                        this.model.Meshes[0].MeshParts[0].Effect = effect;
-                        size = 2.0f;
-                        break;
-
-                    case 2: 
-                        sEffect = "Simple";                        
-                        this.model = this.Content.Load<Model>("Models/bunny");
-                        this.model.Meshes[0].MeshParts[0].Effect = effect;
-                        size = 200.0f;
-                        break;
-
-                    case 3: 
-                        sEffect = "CellShader";                        
-                        this.model = this.Content.Load<Model>("Models/Teapot");
-                        this.model.Meshes[0].MeshParts[0].Effect = effect;
-                        size = 10.0f;
-                        break;
-
-                    case 4:
-                        sEffect = "Simple";
                         this.model = this.Content.Load<Model>("Models/femalehead");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
                         size = 2.0f;
@@ -241,6 +220,7 @@ namespace GraphicsPractical3
             ModelMesh mesh = this.model.Meshes[0];
             Effect effect = mesh.Effects[0];
             //Effect TextureEffect = mesh.Effects[0];
+            Effect postProcess = mesh.Effects[0];
            
             // Set the effect parameters, Color, LightSource, Ambient and specular
             effect.Parameters["DiffuseColor"].SetValue(modelMaterial.DiffuseColor.ToVector4());
@@ -263,20 +243,7 @@ namespace GraphicsPractical3
 
             // Draw the model
             mesh.Draw();
-
-            /*
-            //Adding Texture
-            TextureEffect.Parameters["Texture"].SetValue(this.texture);
-            TextureEffect.Parameters["World"].SetValue(this.quadTransform);
-            TextureEffect.CurrentTechnique = TextureEffect.Techniques["TextureTechnique"];
-            this.camera.SetEffectParameters(TextureEffect);
-
-            foreach (EffectPass pass in TextureEffect.CurrentTechnique.Passes)
-            {
-                pass.Apply();
-                GraphicsDevice.DrawUserIndexedPrimitives<VertexPositionNormalTexture>(PrimitiveType.TriangleList, this.quadVertices, 0, 4, this.quadIndices, 0, 2);
-            }*/
-
+                                    
             base.Draw(gameTime);
         }
     }

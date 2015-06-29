@@ -143,29 +143,29 @@ float4 CellShading(VertexShaderOutput input)
 
 		//lambertian calculation (2.1)
 		float DiffuseIntensity = max(0, saturate(dot(input.Normal, normalize(PointLight[0] - normal))));
-	if (DiffuseIntensity >= 0 && DiffuseIntensity <= 0.25)
+	if (DiffuseIntensity >= 0 && DiffuseIntensity <= 0.20)
 		DiffuseIntensity = 0;
-	else if (DiffuseIntensity > 0.25 && DiffuseIntensity <= 0.50)
-		DiffuseIntensity = 0.25;
-	else if (DiffuseIntensity > 0.50 && DiffuseIntensity <= 0.75)
-		DiffuseIntensity = 0.50;
-	else 
-		DiffuseIntensity = 0.75;
+	else if (DiffuseIntensity > 0.3 && DiffuseIntensity <= 0.45)
+		DiffuseIntensity = 0.3;
+	else if (DiffuseIntensity > 0.55 && DiffuseIntensity <= 0.70)
+		DiffuseIntensity = 0.55;
+	else if (DiffuseIntensity > 0.80 && DiffuseIntensity <= 1)
+		DiffuseIntensity = 0.80;
 
 	float4 diffColor = DiffuseColor * DiffuseIntensity;
-	
+
 		float4 ambColor = AmbientColor * AmbientIntensity;
 
-	float4 color = diffColor + ambColor ;
-	//float colorcheck = ddx(diffColor + ambColor) + ddy(diffColor + ambColor);
+		float4 color = diffColor + ambColor;
+		//float colorcheck = ddx(diffColor + ambColor) + ddy(diffColor + ambColor);
 
-	/*if (colorcheck != 0)
-	{
+		/*if (colorcheck != 0)
+		{
 		diffColor = DiffuseColor * max(0, saturate(dot(input.Normal, normalize(PointLight[0] - normal))));
 		ambColor = AmbientColor * AmbientIntensity;
 		color = diffColor + ambColor;
-	}*/
-		
+		}*/
+
 		return color;
 }
 
@@ -242,6 +242,7 @@ technique CellShader
 		PixelShader = compile ps_3_0 CellShaderPixelShader();
 	}
 }
+
 
 //---------------------------------------- Technique: TextureTechnique ----------------------------------------
 /*VertexShaderOutput TextureVertexShader(VertexShaderInput input)

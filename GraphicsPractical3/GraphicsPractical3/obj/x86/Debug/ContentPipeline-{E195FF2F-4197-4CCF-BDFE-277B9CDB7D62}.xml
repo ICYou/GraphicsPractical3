@@ -8,7 +8,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\bin\x86\Debug\Content\Textures\CobblestonesDiffuse.xnb</Output>
-      <Time>2015-05-12T10:24:36+02:00</Time>
+      <Time>2015-06-28T22:46:46.0526378+02:00</Time>
     </Item>
     <Item>
       <Source>Normal Maps\CobblestonesNormal.png</Source>
@@ -17,7 +17,7 @@
       <Processor>TextureProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\bin\x86\Debug\Content\Normal Maps\CobblestonesNormal.xnb</Output>
-      <Time>2015-05-12T10:24:36+02:00</Time>
+      <Time>2015-06-28T22:46:46.0046029+02:00</Time>
     </Item>
     <Item>
       <Source>Effects\Simple.fx</Source>
@@ -26,7 +26,7 @@
       <Processor>EffectProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\bin\x86\Debug\Content\Effects\Simple.xnb</Output>
-      <Time>2015-06-28T17:51:08.6703948+02:00</Time>
+      <Time>2015-06-29T15:25:19.339043+02:00</Time>
     </Item>
     <Item>
       <Source>Models\Teapot.fbx</Source>
@@ -35,10 +35,10 @@
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\bin\x86\Debug\Content\Models\Teapot.xnb</Output>
-      <Time>2015-06-01T17:30:32+02:00</Time>
+      <Time>2015-06-28T22:46:45.8618629+02:00</Time>
       <Dependency>
         <Key>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\obj\x86\Debug\Models\Teapot_0.xml</Key>
-        <Value>2015-06-28T13:49:30.3151369+02:00</Value>
+        <Value>2015-06-28T22:47:31.1159897+02:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -48,10 +48,10 @@
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\bin\x86\Debug\Content\Models\bunny.xnb</Output>
-      <Time>2015-06-27T15:51:14.1421609+02:00</Time>
+      <Time>2015-06-28T22:46:45.9130401+02:00</Time>
       <Dependency>
         <Key>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\obj\x86\Debug\Models\bunny_0.xml</Key>
-        <Value>2015-06-28T13:49:30.5502873+02:00</Value>
+        <Value>2015-06-28T22:47:31.4212021+02:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -61,10 +61,10 @@
       <Processor>ModelProcessor</Processor>
       <Options>None</Options>
       <Output>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\bin\x86\Debug\Content\Models\femalehead.xnb</Output>
-      <Time>2015-06-27T15:51:52.67846+02:00</Time>
+      <Time>2015-06-28T22:46:45.9615751+02:00</Time>
       <Dependency>
         <Key>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\obj\x86\Debug\Models\femalehead_0.xml</Key>
-        <Value>2015-06-28T13:49:30.9655072+02:00</Value>
+        <Value>2015-06-28T22:47:31.9135513+02:00</Value>
       </Dependency>
     </Item>
     <Item>
@@ -72,21 +72,21 @@
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\obj\x86\Debug\Models\Teapot_0.xml</Output>
-      <Time>2015-06-01T17:30:32+02:00</Time>
+      <Time>2015-06-28T22:46:45.8618629+02:00</Time>
     </Item>
     <Item>
       <Source>Models\bunny.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\obj\x86\Debug\Models\bunny_0.xml</Output>
-      <Time>2015-06-27T15:51:14.1421609+02:00</Time>
+      <Time>2015-06-28T22:46:45.9130401+02:00</Time>
     </Item>
     <Item>
       <Source>Models\femalehead.fbx</Source>
       <Importer>FbxImporter</Importer>
       <Options>IntermediateFile, DontCacheImportedData</Options>
       <Output>C:\Users\ruben\Desktop\School\Graphics\GraphicsPractical3\GraphicsPractical3\GraphicsPractical3\obj\x86\Debug\Models\femalehead_0.xml</Output>
-      <Time>2015-06-27T15:51:52.67846+02:00</Time>
+      <Time>2015-06-28T22:46:45.9615751+02:00</Time>
     </Item>
     <BuildSuccessful>true</BuildSuccessful>
     <Settings>
