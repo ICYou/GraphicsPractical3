@@ -267,8 +267,8 @@ namespace GraphicsPractical3
                 {
                     effect.CurrentTechnique = effect.Techniques["GaussianBlur"];
                 }
-                
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, effect);
+
+                spriteBatch.Begin(0, BlendState.Opaque, SamplerState.PointWrap, DepthStencilState.Default, RasterizerState.CullNone, effect);
                 spriteBatch.Draw(renderTarget, rectangle, Color.White);
                 spriteBatch.End();
             }

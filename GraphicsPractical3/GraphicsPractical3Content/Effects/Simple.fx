@@ -207,15 +207,15 @@ technique CellShader
 }
 //---------------------------------------- Technique: ColorFilterTechnique ----------------------------------------
 
-float4 ColorFilterPixelShader(float2 TextureCoordinate : TEXCOORD0) : COLOR0
+float4 ColorFilterPixelShader(float2 TextureCoord : TEXCOORD0) : COLOR0
 {	
 	//get color from image
-	float4 color = tex2D(TextureSampler, TextureCoordinate);
+	float4 color = tex2D(TextureSampler, TextureCoord);
 
 	//greyvalues
 	float3 greyValues = (0.3, 0.59, 0.11);
 	
-	//return the changedcolor in greyvalues = dot product of colors and greyvalues
+	//return the changed color in greyvalues = dot product of colors and greyvalues
 	return dot(color, greyValues);;
 }
 
@@ -230,28 +230,25 @@ technique ColorFilter
 //---------------------------------------- Technique: GaussianBlurTechnique ----------------------------------------
 
 float weights[11] =
-{
-
+{	//sigma 2
 	0.0093, 0.028002, 0.065984, 0.121703, 0.175713, 0.198596, 0.175713, 0.121703, 0.065984, 0.028002, 0.0093
-	//sigma 1
-	//0.000003, 0.000229, 0.005977, 0.060598, 0.24173, 0.382925, 0.24173, 0.060598, 0.005977, 0.000229, 0.000003
-	//0.00598, 0.060626, 0.241843, 0.383103, 0.241843, 0.060626, 0.00598
 };
 float offset[11] =
 {
-	//-3,-2,-1,0,1,2,3
 	-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5
 };
 
-float4 GaussianBlurPixelShader(float2 TextureCoordinate : TEXCOORD0) : COLOR0
+float4 GaussianBlurPixelShader(float2 TextureCoord : TEXCOORD0) : COLOR0
 {
 	float2 coord;
-	coord.y = TextureCoordinate.y;
 	float4 color = float4(0.0, 0.0, 0.0, 0.0);
 
+	coord.y = TextureCoord.y;
+		
+	//apply the weight for each offset and add to color.
 		for (int i = 0; i < 11; ++i)
 		{
-		coord.x = TextureCoordinate.x + offset[i] / 800.0f;
+		coord.x = TextureCoord.x + offset[i] / 800.0f;
 		color += tex2D(TextureSampler, coord) * weights[i];
 		}
 
