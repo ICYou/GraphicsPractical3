@@ -25,14 +25,8 @@ namespace GraphicsPractical3
         // Model
         private Model model;
         private Material modelMaterial;
-
-        // Quad
-        private VertexPositionNormalTexture[] quadVertices;
-        private short[] quadIndices;
-        private Matrix quadTransform;
-        private Texture2D texture;
-
-        //Effect on Space
+          
+        //Variable Declerations
         string sEffect;
         int teller;
         int iSwitch;
@@ -40,8 +34,10 @@ namespace GraphicsPractical3
         float size;
         bool colorFilter;
         bool postProcess;
+
+        //used for PostProcessing
         RenderTarget2D renderTarget;
-        Rectangle screenRectangle;
+        Rectangle rectangle;
         PresentationParameters presParameters;
 
         public Game1()
@@ -81,7 +77,7 @@ namespace GraphicsPractical3
             // Load the "Simple" effect
             Effect effect = this.Content.Load<Effect>("Effects/Simple");
             // Load the model and let it use the "Simple" effect
-            this.model = this.Content.Load<Model>("Models/Teapot");
+            this.model = this.Content.Load<Model>("Models/femalehead");
             
             this.model.Meshes[0].MeshParts[0].Effect = effect;
 
@@ -99,58 +95,20 @@ namespace GraphicsPractical3
             this.light[3] = new Vector3(-50, 0, -50);
             this.light[4] = new Vector3(-100, -100, 0);
 
-            // Load Texture
-            texture = Content.Load<Texture2D>("Textures/CobblestonesDiffuse");
-
-            //Start Effect
+            //Start Values
             sEffect = "Simple";
             teller = 0;
             iSwitch = 0;
             b = true;
-            size = 10.0f;
+            size = 2.0f;
             colorFilter = false;
             postProcess = false;
             presParameters = this.GraphicsDevice.PresentationParameters;
             renderTarget = new RenderTarget2D(this.GraphicsDevice, 800, 600, true, presParameters.BackBufferFormat, presParameters.DepthStencilFormat);
-            screenRectangle = new Rectangle(0, 0, 800, 600);
-            
-            // Setup the quad
-            this.setupQuad();
+            rectangle = new Rectangle(0, 0, 800, 600);
+                     
         }
-
-        /// <summary>
-        /// Sets up a 2 by 2 quad around the origin.
-        /// </summary>
-        private void setupQuad()
-        {
-            float scale = 50.0f;
-
-            // Normal points up
-            Vector3 quadNormal = new Vector3(0, 1, 0);
-
-            this.quadVertices = new VertexPositionNormalTexture[4];
-            // Top left
-            this.quadVertices[0].Position = new Vector3(-1, 0, -1);
-            this.quadVertices[0].Normal = quadNormal;
-            this.quadVertices[0].TextureCoordinate = new Vector2(-1, -1);
-            // Top right
-            this.quadVertices[1].Position = new Vector3(1, 0, -1);
-            this.quadVertices[1].Normal = quadNormal;
-            this.quadVertices[1].TextureCoordinate = new Vector2(1, -1);
-            // Bottom left
-            this.quadVertices[2].Position = new Vector3(-1, 0, 1);
-            this.quadVertices[2].Normal = quadNormal;
-            this.quadVertices[2].TextureCoordinate = new Vector2(-1, 1);
-            // Bottom right
-            this.quadVertices[3].Position = new Vector3(1, 0, 1);
-            this.quadVertices[3].Normal = quadNormal;
-            this.quadVertices[3].TextureCoordinate = new Vector2(1, 1);
-
-            this.quadIndices = new short[] { 0, 1, 2, 1, 2, 3 };
-            this.quadTransform = Matrix.Multiply(Matrix.CreateScale(scale), Matrix.CreateTranslation(0, -15.0f, 0));
-
-        }
-
+        
         protected override void Update(GameTime gameTime)
         {
             //float timeStep = (float)gameTime.ElapsedGameTime.TotalSeconds * 60.0f;
@@ -160,6 +118,7 @@ namespace GraphicsPractical3
             float deltaAngleX = 0;
             KeyboardState kbState = Keyboard.GetState();
                         
+            //counter goes up if space is pressed
             if (kbState.IsKeyDown(Keys.Space))
             {      
                 if(b==true)
@@ -168,19 +127,24 @@ namespace GraphicsPractical3
                     b = false;
                     iSwitch = teller % 4;
                 }
+
+                //effect file
                 Effect effect = this.Content.Load<Effect>("Effects/Simple");               
 
+                //switch that changes for each effect on spacebar
                 switch(iSwitch)
                 {
+                        //Multiple Lightsources
                     case 0:
                         colorFilter = false;
                         postProcess = false;
                         sEffect = "Simple";
-                        this.model = this.Content.Load<Model>("Models/Teapot");
+                        this.model = this.Content.Load<Model>("Models/femalehead");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
-                        size = 10.0f;
+                        size = 2.0f;
                         break;
 
+                        //Cell Shader
                     case 1:
                         colorFilter = false;
                         postProcess = false;
@@ -190,24 +154,27 @@ namespace GraphicsPractical3
                         size = 2.0f;
                         break;
 
+                        //Simple Color Filter
                     case 2:
                         colorFilter = true;
                         postProcess = true;
                         sEffect = "Simple";
-                        this.model = this.Content.Load<Model>("Models/Teapot");
+                        this.model = this.Content.Load<Model>("Models/femalehead");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
-                        size = 10.0f;
+                        size = 2.0f;
                         break;
 
+                        //Gaussain Blur
                     case 3:
                         colorFilter = false;
                         postProcess = true;
                         sEffect = "Simple";
-                        this.model = this.Content.Load<Model>("Models/Teapot");
+                        this.model = this.Content.Load<Model>("Models/femalehead");
                         this.model.Meshes[0].MeshParts[0].Effect = effect;
-                        size = 10.0f;
+                        size = 2.0f;
                         break;
 
+                        //Default
                     default:
                         colorFilter = false;
                         postProcess = false;
@@ -219,6 +186,7 @@ namespace GraphicsPractical3
                 }
 
             }
+            
             if (kbState.IsKeyUp(Keys.Space))
             {
                 b = true;
@@ -249,23 +217,16 @@ namespace GraphicsPractical3
         {
             // Clear the screen in a predetermined color and clear the depth buffer
             this.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DeepSkyBlue, 1.0f, 0);
-           
-            
-                        
+                  
+            //new render target for postprocessing
             if(postProcess)
             {
                 this.GraphicsDevice.SetRenderTarget(renderTarget);
-                //this.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DeepSkyBlue, 1.0f, 0);               
-
-            }
-            
+            }           
 
             // Get the model's only mesh
             ModelMesh mesh = this.model.Meshes[0];
             Effect effect = mesh.Effects[0];
-            //Effect TextureEffect = mesh.Effects[0];
-            //Effect postProcess = mesh.Effects[0];
-
             
             // Set the effect parameters, Color, LightSource, Ambient and specular
             effect.Parameters["DiffuseColor"].SetValue(modelMaterial.DiffuseColor.ToVector4());
@@ -285,7 +246,7 @@ namespace GraphicsPractical3
 
             effect.Parameters["World"].SetValue(World);
             effect.Parameters["InversedTransposedWorld"].SetValue(InversedTransposedWorld);
-           
+                      
             this.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
             this.GraphicsDevice.BlendState = BlendState.Opaque;
 
@@ -294,8 +255,10 @@ namespace GraphicsPractical3
 
             if(postProcess)
             {
+                //set rendertarget to screen
                 this.GraphicsDevice.SetRenderTarget(null);
 
+                //What postprocess effect is used
                 if(colorFilter)
                 {
                     effect.CurrentTechnique = effect.Techniques["ColorFilter"];
@@ -304,9 +267,9 @@ namespace GraphicsPractical3
                 {
                     effect.CurrentTechnique = effect.Techniques["GaussianBlur"];
                 }
-
-                spriteBatch.Begin(0, BlendState.Opaque, null, null, null, effect);
-                spriteBatch.Draw(renderTarget, screenRectangle, Color.AliceBlue);
+                
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, effect);
+                spriteBatch.Draw(renderTarget, rectangle, Color.White);
                 spriteBatch.End();
             }
             

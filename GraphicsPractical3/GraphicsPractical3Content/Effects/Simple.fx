@@ -34,7 +34,6 @@ struct VertexShaderInput
 {
 	float4 Position3D : POSITION0;
 	float4 Normal3D : NORMAL0;
-	//float2 TextureCoordinate : TEXCOORD0;
 
 };
 
@@ -51,7 +50,6 @@ struct VertexShaderOutput
 	float4 Position2D : POSITION0;
 	float4 Normal : TEXCOORD0;
 	float4 Position3D : TEXCOORD1;
-	//float2 TextureCoordinate : TEXCOORD3;
 };
 
 //------------------------------------------ Functions ------------------------------------------
@@ -59,54 +57,73 @@ struct VertexShaderOutput
 // PhongLighting implementation
 float4 PhongLighting(VertexShaderOutput input)
 {		
-		//2.4
+		//calculate inversedtransposed normal
 		float3 normal = mul(input.Normal, InversedTransposedWorld);
 
 		//lambertian calculation (2.1)
 		float DiffuseIntensity = 0;
 		float SpecPow = 0;
 	
+		//calculate intensity using all the lights
 		for (int i = 0; i < MAX_LIGHTS; i++)
 		{
+			//calculate diffuse intensity and add it to the last intensity
 			DiffuseIntensity += max(0, saturate(dot(input.Normal, normalize(PointLight[i] - normal))));
-		
+			
+			//calculate specular
 			float3 lightVector = normalize(PointLight[i] - input.Position3D);
 			float3 viewVector = normalize(CameraPosition - input.Position3D);
 			float3 halfVector = normalize(lightVector + viewVector);
 			SpecPow += pow(saturate(dot(input.Normal, halfVector)), SpecularPower);
 		}
+		//diffusecolor calculation
 		float4 diffColor = DiffuseColor * DiffuseIntensity;
-		//ambientcolor calculation (2.2)
-		float4 ambColor = AmbientColor * AmbientIntensity;
-		//specular calculation (2.3)
 		
+			//ambientcolor calculation 
+		float4 ambColor = AmbientColor * AmbientIntensity;
+		
+		//specular calculation 		
 		float specColor = SpecularColor * SpecPow * SpecularIntensity;
 		
+		//return color
 		return diffColor + ambColor + specColor;
 }
 
 // Cell Shading
 float4 CellShading(VertexShaderOutput input)
 {
-	
+	//Calculate normal
 	float3 normal = mul(input.Normal, InversedTransposedWorld);
 
-		//lambertian calculation (2.1)
-		float DiffuseIntensity = max(0, saturate(dot(input.Normal, normalize(PointLight[0] - normal))));
-	if (DiffuseIntensity >= 0 && DiffuseIntensity <= 0.20)
+	//Calulate DiffuseIntensity
+	float DiffuseIntensity = max(0, saturate(dot(input.Normal, normalize(PointLight[0] - normal))));
+	
+	//Change intensity so 
+	if (DiffuseIntensity >= 0 && DiffuseIntensity <= 0.25)
+	{
 		DiffuseIntensity = 0;
-	else if (DiffuseIntensity > 0.3 && DiffuseIntensity <= 0.45)
-		DiffuseIntensity = 0.3;
-	else if (DiffuseIntensity > 0.55 && DiffuseIntensity <= 0.70)
-		DiffuseIntensity = 0.55;
-	else if (DiffuseIntensity > 0.80 && DiffuseIntensity <= 1)
-		DiffuseIntensity = 0.80;
+	}		
+	else if (DiffuseIntensity > 0.25 && DiffuseIntensity <= 0.50)
+	{
+		DiffuseIntensity = 0.25;
+	}		
+	else if (DiffuseIntensity > 0.50 && DiffuseIntensity <= 0.75)
+	{
+		DiffuseIntensity = 0.50;
+	}		
+	else if (DiffuseIntensity > 0.75 && DiffuseIntensity <= 1)
+	{
+		DiffuseIntensity = 0.75;
+	}
 
 	float4 diffColor = DiffuseColor * DiffuseIntensity;
-
 		float4 ambColor = AmbientColor * AmbientIntensity;
 
-		float4 color = diffColor + ambColor;
+		
+
+	//float gradientLength = length(float2(derivX, derivY));
+		//float thresholdWidth = 2.0 * gradientLength;
+		//color = lerp(diffColor, ambColor, aliasColor);
 		//float colorcheck = ddx(diffColor + ambColor) + ddy(diffColor + ambColor);
 
 		/*if (colorcheck != 0)
@@ -116,7 +133,7 @@ float4 CellShading(VertexShaderOutput input)
 		color = diffColor + ambColor;
 		}*/
 
-		return color;
+		return diffColor + ambColor;
 }
 
 //---------------------------------------- Technique: Simple ----------------------------------------
@@ -131,10 +148,10 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 		float4 viewPosition = mul(worldPosition, View);
 		output.Position2D = mul(viewPosition, Projection);
 
-	//1.1 Coloring using normals (add normal values to the output, so it can be used for coloring)
+	//add normal values to the output, so it can be used for coloring
 	output.Normal = input.Normal3D;
 
-	//1.2 Checkerboard pattern (add pixel coordinates)
+	//add pixel coordinates
 	output.Position3D = input.Position3D;
 
 	return output;
@@ -142,13 +159,7 @@ VertexShaderOutput SimpleVertexShader(VertexShaderInput input)
 
 float4 SimplePixelShader(VertexShaderOutput input) : COLOR0
 {
-	//Uncomment the one you want to see
-	//float4 color = NormalColor(input); //1.1
-	//float4 color = ProceduralColor(input); //1.2
-	//float4 color = LambertianLighting(input); //(2.1 + 2.2)
-	float4 color = PhongLighting(input);	//2.3,2.4
-	//float4 color = CellShading(input);
-	return color;
+	return PhongLighting(input);
 }
 
 technique Simple
@@ -171,8 +182,11 @@ VertexShaderOutput CellShaderVertexShader(VertexShaderInput input)
 	float4 worldPosition = mul(input.Position3D, World);
 		float4 viewPosition = mul(worldPosition, View);
 		output.Position2D = mul(viewPosition, Projection);
-
+	
+	//add normal values to the output, so it can be used for coloring
 	output.Normal = input.Normal3D;
+
+	//add pixel coordinates
 	output.Position3D = input.Position3D;
 
 	return output;
@@ -180,8 +194,7 @@ VertexShaderOutput CellShaderVertexShader(VertexShaderInput input)
 
 float4 CellShaderPixelShader(VertexShaderOutput input) : COLOR0
 {
-	float4 color = CellShading(input);
-	return color;
+	return CellShading(input);
 }
 
 technique CellShader
@@ -194,15 +207,16 @@ technique CellShader
 }
 //---------------------------------------- Technique: ColorFilterTechnique ----------------------------------------
 
-
 float4 ColorFilterPixelShader(float2 TextureCoordinate : TEXCOORD0) : COLOR0
 {	
+	//get color from image
 	float4 color = tex2D(TextureSampler, TextureCoordinate);
 
+	//greyvalues
 	float3 greyValues = (0.3, 0.59, 0.11);
-	color = dot(color, greyValues);
 	
-	return color;
+	//return the changedcolor in greyvalues = dot product of colors and greyvalues
+	return dot(color, greyValues);;
 }
 
 technique ColorFilter
@@ -215,15 +229,34 @@ technique ColorFilter
 
 //---------------------------------------- Technique: GaussianBlurTechnique ----------------------------------------
 
+float weights[11] =
+{
+
+	0.0093, 0.028002, 0.065984, 0.121703, 0.175713, 0.198596, 0.175713, 0.121703, 0.065984, 0.028002, 0.0093
+	//sigma 1
+	//0.000003, 0.000229, 0.005977, 0.060598, 0.24173, 0.382925, 0.24173, 0.060598, 0.005977, 0.000229, 0.000003
+	//0.00598, 0.060626, 0.241843, 0.383103, 0.241843, 0.060626, 0.00598
+};
+float offset[11] =
+{
+	//-3,-2,-1,0,1,2,3
+	-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5
+};
 
 float4 GaussianBlurPixelShader(float2 TextureCoordinate : TEXCOORD0) : COLOR0
 {
-	float4 color = tex2D(TextureSampler, TextureCoordinate);
+	float2 coord;
+	coord.y = TextureCoordinate.y;
+	float4 color = float4(0.0, 0.0, 0.0, 0.0);
 
-	float3 greyValues = (0.3, 0.59, 0.11);
-	color = dot(color.rgb, greyValues);
+		for (int i = 0; i < 11; ++i)
+		{
+		coord.x = TextureCoordinate.x + offset[i] / 800.0f;
+		color += tex2D(TextureSampler, coord) * weights[i];
+		}
 
 	return color;
+
 }
 
 technique GaussianBlur
@@ -233,45 +266,3 @@ technique GaussianBlur
 		PixelShader = compile ps_2_0 GaussianBlurPixelShader();
 	}
 }
-
-
-//---------------------------------------- Technique: TextureTechnique ----------------------------------------
-/*VertexShaderOutput TextureVertexShader(VertexShaderInput input)
-{
-	// Allocate an empty output struct
-	VertexShaderOutput output = (VertexShaderOutput)0;
-
-	// Do the matrix multiplications for perspective projection and the world transform
-	
-	float4 worldPosition = mul(input.Position3D, World);
-		float4 viewPosition = mul(worldPosition, View);
-		output.Position2D = mul(viewPosition, Projection);
-
-	//3.1
-	output.TextureCoordinate = input.TextureCoordinate;
-
-	return output;
-}
-
-//Texture
-float4 TextureColor(VertexShaderOutput input)
-{
-	return tex2D(TextureSampler, input.TextureCoordinate);
-}
-
-float4 TexturePixelShader(VertexShaderOutput input) : COLOR0
-{	
-	float4 color = TextureColor(input);
-
-	return color;
-}
-
-
-technique TextureTechnique
-{
-	pass Pass0
-	{
-		VertexShader = compile vs_2_0 TextureVertexShader();
-		PixelShader = compile ps_2_0 TexturePixelShader();
-	}
-}*/
